@@ -10,17 +10,42 @@ const config = {
     storageBucket: "clothing-store-3b85c.appspot.com",
     messagingSenderId: "526906348681",
     appId: "1:526906348681:web:6ba640193df128184b2258"
-  };
+};
 
-  firebase.initializeApp(config);
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+    if (!userAuth) return;
 
-  export const auth = firebase.auth();
-  export const firestore = firebase.firestore();
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
 
-  const provider = new firebase.auth.GoogleAuthProvider();
+    const snapShot = await userRef.get();
+    if(!snapShot.exists) {
+        const {displayName, email} = userAuth;
+        const createdAt = new Date();
 
-  provider.setCustomParameters({prompt: 'select_account'});
+        try {
+            await userRef.set({
+                displayName,
+                email,
+                createdAt,
+                ...additionalData
+            })
+        } catch(error){
+            console.log('Error creating user', error.message);
+        }
+    }
+    return userRef;
 
-  export const signWithGoogle = () => auth.signInWithPopup(provider);
+}
 
-  export default firebase;
+firebase.initializeApp(config);
+
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();
+
+const provider = new firebase.auth.GoogleAuthProvider();
+
+provider.setCustomParameters({ prompt: 'select_account' });
+
+export const signWithGoogle = () => auth.signInWithPopup(provider);
+
+export default firebase;
