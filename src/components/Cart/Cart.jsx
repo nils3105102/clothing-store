@@ -4,14 +4,21 @@ import './Cart.scss';
 import { ReactComponent as LogoBag } from '../../assets/shopping-bag.svg';
 import { connect } from 'react-redux';
 import {toggleCart} from '../../redux/cart/cartAction';
+import { selectCartItemsCount } from '../../redux/cart/cartSelectors';
 
-const Cart = ({toggleCart}) => {
+const Cart = ({toggleCart, itemCount}) => {
     return (
         <div className="cart-icon" onClick={toggleCart}>
             <LogoBag className="shopping-icon"/>
-            <span className="item-count">0</span>
+            <span className="item-count">{itemCount}</span>
         </div>
     );
+}
+
+const mapStateToProps = (state) => {
+    return {
+        itemCount: selectCartItemsCount(state)
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -20,4 +27,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
