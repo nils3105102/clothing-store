@@ -11,7 +11,7 @@ import { setCurrentUser } from './redux/user/userAction';
 
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from './redux/user/userSelector';
-import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
+import CheckoutPage from './pages/сheckoutPage/CheckoutPage';
 
 
 class App extends React.Component {
